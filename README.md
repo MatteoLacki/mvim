@@ -1,17 +1,29 @@
-# betternvim
+# mvim
 
 Small Python-focused Neovim config, installed as `mvim`.
 
 ## Install from GitHub
 
 ```bash
-git clone <your-github-url> betternvim
-cd betternvim
+git clone <your-github-url> mvim
+cd mvim
 make install
 ```
 
-`make install` downloads Neovim `v0.12.3` to `~/.local/bin/mvim`, links this
-repo to `~/.config/nvim`, installs plugins, and installs Pyright through Mason.
+`make install` detects Linux/macOS and CPU architecture, downloads Neovim `v0.12.3`, installs it as `~/.local/bin/mvim`, links this repo to `~/.config/nvim`, installs plugins, and installs Pyright through Mason.
+
+Prerequisites:
+
+- `bash`, `make`, `curl`, `git`, `tar`
+- `python3`
+- Node/npm, for Mason installing Pyright
+- `tmux`, for Python send-to-REPL workflow
+- IPython for the Python REPL workflow, installable with `python3 -m pip install ipython` if missing
+
+Supported Neovim downloads:
+
+- Linux x86_64 / arm64: AppImage
+- macOS x86_64 / arm64: official tarball
 
 Make sure `~/.local/bin` is on `PATH`:
 
@@ -32,7 +44,7 @@ make install   # install mvim and sync plugins/tools
 make sync      # resync plugins and Pyright
 make check     # syntax/startup check
 make doctor    # show executable/config/tool status
-make uninstall # remove ~/.local/bin/mvim and this repo's ~/.config/nvim link
+make uninstall # remove ~/.local/bin/mvim, installed tarball dir, and this repo's ~/.config/nvim link
 ```
 
 ## Python REPL sending
