@@ -12,6 +12,16 @@ make install
 
 `make install` detects Linux/macOS and CPU architecture, downloads Neovim `v0.12.3`, installs it as `~/.local/bin/mvim`, links this repo to `~/.config/nvim`, installs plugins, and installs Pyright through Mason.
 
+Main dependencies:
+
+- Neovim `v0.12.3`, downloaded by `make install` as `mvim`
+- `lazy.nvim`, plugin manager bootstrapped by the config
+- Pyright, installed by Mason for Python LSP
+- `nvim-cmp`/LuaSnip for completion and snippets
+- `nvim-autopairs` for bracket/quote completion
+- `vim-slime` plus tmux for send-to-REPL workflow
+- Optional `minuet-ai.nvim` for OpenAI API-backed AI completion
+
 Prerequisites:
 
 - `bash`, `make`, `curl`, `git`, `tar`
@@ -37,6 +47,8 @@ Then start the editor with:
 mvim file.py
 ```
 
+See [KEYS.md](KEYS.md) for the key-stroke reference.
+
 Useful make targets:
 
 ```bash
@@ -46,6 +58,10 @@ make check     # syntax/startup check
 make doctor    # show executable/config/tool status
 make uninstall # remove ~/.local/bin/mvim, installed tarball dir, and this repo's ~/.config/nvim link
 ```
+
+## Key Bindings
+
+The most important key-stroke combinations are documented in [KEYS.md](KEYS.md).
 
 ## Python REPL sending
 
