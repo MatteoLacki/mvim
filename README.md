@@ -73,7 +73,7 @@ Or ask `mvim` to start IPython in tmux with:
 
 Send code to the active pane in an attached tmux session, falling back to the last listed tmux pane:
 
-- `<F5>`, `<leader>s`, `<C-Space>`, or `<C-Enter>` if your terminal supports it: current Python line or enclosing indented block, then move past it
+- `<F5>`, `<leader>s`, `<C-Space>`, or `<C-Enter>` when your terminal emits a distinct key code: current Python line or enclosing indented block, then move past it
 - visual `<F5>` or `<C-Space>`: selected block
 - `<leader><Enter>`: current `# %%` cell
 

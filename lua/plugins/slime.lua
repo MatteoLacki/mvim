@@ -265,20 +265,25 @@ return {
         })
       end
 
-      vim.keymap.set("n", "<F5>", send_line, { desc = "Send line to tmux" })
-      vim.keymap.set("x", "<F5>", send_visual, { desc = "Send selection to tmux" })
-      vim.keymap.set("n", "<leader>s", send_line, { desc = "Send line/block to tmux" })
-      vim.keymap.set("x", "<leader>s", send_visual, { desc = "Send selection to tmux" })
-      vim.keymap.set("n", "<C-Space>", send_line, { desc = "Send line/block to tmux" })
-      vim.keymap.set("x", "<C-Space>", send_visual, { desc = "Send selection to tmux" })
-      vim.keymap.set("n", "<Nul>", send_line, { desc = "Send line/block to tmux" })
-      vim.keymap.set("x", "<Nul>", send_visual, { desc = "Send selection to tmux" })
-      vim.keymap.set("n", "<C-CR>", send_line, { desc = "Send line/block to tmux" })
-      vim.keymap.set("x", "<C-CR>", send_visual, { desc = "Send selection to tmux" })
-      vim.keymap.set("n", "<Esc>[13;5u", send_line, { desc = "Send line/block to tmux" })
-      vim.keymap.set("x", "<Esc>[13;5u", send_visual, { desc = "Send selection to tmux" })
-      vim.keymap.set("n", "<Esc>[13;5~", send_line, { desc = "Send line/block to tmux" })
-      vim.keymap.set("x", "<Esc>[13;5~", send_visual, { desc = "Send selection to tmux" })
+      local send_keys = {
+        "<F5>",
+        "<leader>s",
+        "<C-Space>",
+        "<Nul>",
+        "<C-CR>",
+        "<C-Enter>",
+        "<Esc>[13;5u",
+        "<Esc>[13;5~",
+        "<Esc>[27;5;13~",
+        "<Esc>[57414;5u",
+        "<Esc>\r",
+        "<Esc>\n",
+      }
+
+      for _, key in ipairs(send_keys) do
+        vim.keymap.set("n", key, send_line, { desc = "Send line/block to tmux" })
+        vim.keymap.set("x", key, send_visual, { desc = "Send selection to tmux" })
+      end
       vim.keymap.set("n", "<leader><CR>", send_cell, { desc = "Send Python cell to tmux" })
       vim.keymap.set("n", "<leader>rp", start_ipython, { desc = "Start IPython tmux pane" })
     end,
