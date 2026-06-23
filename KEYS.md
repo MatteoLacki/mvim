@@ -9,6 +9,10 @@ Leader key is `Space`.
 | `Space w` | normal | Write current file |
 | `Space q` | normal | Quit current window |
 | `Space h` | normal | Clear search highlight |
+| `Space t` | normal | Toggle project tree |
+| `Space T` | normal | Reveal current file in project tree |
+| `Ctrl-w h` | normal | Move focus to the left window, usually the project tree |
+| `Ctrl-w l` | normal | Move focus to the right window, usually the file |
 
 ## Python Send To IPython/tmux
 

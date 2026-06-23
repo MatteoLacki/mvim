@@ -17,6 +17,7 @@ Main dependencies:
 - Neovim `v0.12.3`, downloaded by `make install` as `mvim`
 - `lazy.nvim`, plugin manager bootstrapped by the config
 - Pyright, installed by Mason for Python LSP
+- `nvim-tree.lua` for a toggleable project work-tree
 - `nvim-cmp`/LuaSnip for completion and snippets
 - `nvim-autopairs` for bracket/quote completion
 - `vim-slime` plus tmux for send-to-REPL workflow
@@ -46,6 +47,11 @@ Then start the editor with:
 ```bash
 mvim file.py
 ```
+
+To browse a project tree, start `mvim` from the project directory and press
+`<leader>t`. Use `<leader>T` to reveal the current file in the tree. After
+opening a file from the tree, use `Ctrl-w h` to move focus back to the tree and
+`Ctrl-w l` to return to the file window.
 
 See [KEYS.md](KEYS.md) for the key-stroke reference.
 

@@ -47,6 +47,7 @@ make doctor
 - Visual `Ctrl+Space` and visual `F5` send the selected block.
 - `<leader><Enter>` sends the current `# %%` cell.
 - `<leader>rp` starts IPython in tmux.
+- `<leader>t` toggles the project tree, `<leader>T` reveals the current file in it, and `Ctrl-w h` / `Ctrl-w l` move between the tree and file windows.
 - Bracket/quote autopairs work in insert mode.
 
 ## Verification
