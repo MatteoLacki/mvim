@@ -22,8 +22,39 @@ return {
     config = function()
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+      local function path_exists(path)
+        return vim.uv.fs_stat(path) ~= nil
+      end
+
+      local function project_python(root_dir)
+        local venv = vim.env.VIRTUAL_ENV
+        if venv and venv ~= "" then
+          local python = venv .. "/bin/python"
+          if path_exists(python) then
+            return python
+          end
+        end
+
+        for _, name in ipairs({ ".venv", "venv" }) do
+          local python = root_dir .. "/" .. name .. "/bin/python"
+          if path_exists(python) then
+            return python
+          end
+        end
+
+        local python3 = vim.fn.exepath("python3")
+        if python3 ~= "" then
+          return python3
+        end
+
+        return vim.fn.exepath("python")
+      end
+
       vim.lsp.config("pyright", {
         capabilities = capabilities,
+        before_init = function(_, config)
+          config.settings.python.pythonPath = project_python(config.root_dir or vim.fn.getcwd())
+        end,
         settings = {
           python = {
             analysis = {

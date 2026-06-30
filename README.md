@@ -165,7 +165,19 @@ outside tmux.
 
 ## LSP
 
-Pyright is installed by Mason. Useful keys:
+Pyright is installed by Mason. For Python package completions, start `mvim` from
+the project root and either activate a virtualenv first or keep it at `.venv/`
+or `venv/` in the project root:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install numpy pandas ipython
+mvim file.py
+```
+
+Pyright uses that interpreter, so imports and completions come from packages
+installed in the venv. Useful keys:
 
 - `gd`: definition
 - `gr`: references
