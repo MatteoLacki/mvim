@@ -17,6 +17,7 @@ Leader key is `Space`.
 | `Space T` | normal | Reveal current file in project tree |
 | `Ctrl-w h` | normal | Move focus to the left window, usually the project tree |
 | `Ctrl-w l` | normal | Move focus to the right window, usually the file |
+| `Space c` | normal | Open live colorscheme navigator (`↑`/`↓` preview; `Enter` save; `Esc` restore) |
 | `Tab` | visual/select | Indent the selected lines and keep them selected |
 | `Shift-Tab` | visual/select | Outdent the selected lines and keep them selected |
 
