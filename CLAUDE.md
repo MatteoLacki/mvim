@@ -43,8 +43,8 @@ make doctor
 ## Key Behaviors To Preserve
 
 - Pyright starts for Python files.
-- `Ctrl+Space`, `F5`, and `<leader>s` send the current Python line/block to tmux.
-- Visual `Ctrl+Space` and visual `F5` send the selected block.
+- `Ctrl+Space`, `F5`, and `<leader>s` send the current Python line to tmux.
+- Visual `Ctrl+Space` and visual `F5` send only the selected text.
 - `<leader><Enter>` sends the current `# %%` cell.
 - `<leader>rp` starts IPython in tmux.
 - `<leader>t` toggles the project tree, `<leader>T` reveals the current file in it, and `Ctrl-w h` / `Ctrl-w l` move between the tree and file windows.

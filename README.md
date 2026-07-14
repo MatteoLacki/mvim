@@ -2,6 +2,8 @@
 
 Small Python-focused Neovim config, installed as `mvim`.
 
+`mvim` is short for “myvim”: my Vim, my rules.
+
 ## Key Bindings
 
 Leader key is `Space`.
@@ -25,13 +27,13 @@ Leader key is `Space`.
 
 | Key | Mode | Action |
 | --- | --- | --- |
-| `Ctrl-Space` | normal | Send current Python line or enclosing indented block |
+| `Ctrl-Space` | normal | Send the current Python line |
 | `F5` | normal | Same as `Ctrl-Space`; reliable terminal fallback |
 | `Space s` | normal | Same as `Ctrl-Space`; mnemonic fallback |
 | `Ctrl-Enter` | normal | Same as `Ctrl-Space` when terminal emits a distinct key code |
-| `Ctrl-Space` | visual | Send selected block |
-| `F5` | visual | Send selected block |
-| `Space s` | visual | Send selected block |
+| `Ctrl-Space` | visual | Send selected text |
+| `F5` | visual | Send selected text |
+| `Space s` | visual | Send selected text |
 | `Space Enter` | normal | Send current `# %%` cell |
 | `Space r p` | normal | Start IPython in tmux |
 
@@ -158,8 +160,8 @@ Or ask `mvim` to start IPython in tmux with:
 
 Send code to the active pane in an attached tmux session, falling back to the last listed tmux pane:
 
-- `<F5>`, `<leader>s`, `<C-Space>`, or `<C-Enter>` when your terminal emits a distinct key code: current Python line or enclosing indented block, then move past it
-- visual `<F5>` or `<C-Space>`: selected block
+- `<F5>`, `<leader>s`, `<C-Space>`, or `<C-Enter>` when your terminal emits a distinct key code: current Python line, then move past it
+- visual `<F5>` or `<C-Space>`: selected text
 - `<leader><Enter>`: current `# %%` cell
 
 `<F5>` is the reliable fallback because many terminals do not send a distinct

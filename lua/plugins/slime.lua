@@ -188,24 +188,28 @@ return {
         return tmux_send_text(table.concat(lines, "\n") .. "\n")
       end
 
-      local function send_line()
+      local function send_text(text)
+        if text == "" then
+          return false
+        end
+
         if vim.bo.filetype == "python" then
-          local first, stop = find_python_chunk()
-          if send_range(first, stop) then
-            vim.api.nvim_win_set_cursor(0, { math.min(stop + 1, vim.api.nvim_buf_line_count(0)), 0 })
-          end
-        else
-          local current = vim.api.nvim_win_get_cursor(0)[1]
-          if send_range(current, current) then
-            vim.cmd("normal! j")
-          end
+          return tmux_send_text(python_repl_text(vim.split(text, "\n", { plain = true })))
+        end
+
+        return tmux_send_text(text .. "\n")
+      end
+
+      local function send_line()
+        local current = vim.api.nvim_win_get_cursor(0)[1]
+        if send_range(current, current) then
+          vim.api.nvim_win_set_cursor(0, { math.min(current + 1, vim.api.nvim_buf_line_count(0)), 0 })
         end
       end
 
       local function send_visual()
-        local start_line = vim.fn.getpos("'<")[2]
-        local end_line = vim.fn.getpos("'>")[2]
-        send_range(start_line, end_line)
+        local lines = vim.fn.getregion(vim.fn.getpos("v"), vim.fn.getpos("."), { type = vim.fn.mode() })
+        return send_text(table.concat(lines, "\n"))
       end
 
       local function send_cell()
@@ -281,8 +285,8 @@ return {
       }
 
       for _, key in ipairs(send_keys) do
-        vim.keymap.set("n", key, send_line, { desc = "Send line/block to tmux" })
-        vim.keymap.set("x", key, send_visual, { desc = "Send selection to tmux" })
+        vim.keymap.set("n", key, send_line, { desc = "Send current line to tmux" })
+        vim.keymap.set("x", key, send_visual, { desc = "Send selected text to tmux" })
       end
       vim.keymap.set("n", "<leader><CR>", send_cell, { desc = "Send Python cell to tmux" })
       vim.keymap.set("n", "<leader>rp", start_ipython, { desc = "Start IPython tmux pane" })
