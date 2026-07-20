@@ -104,7 +104,7 @@ Prerequisites:
 
 Supported Neovim downloads:
 
-- Linux x86_64 / arm64: AppImage
+- Linux x86_64 / arm64: official tarball
 - macOS x86_64 / arm64: official tarball
 
 Make sure `~/.local/bin` is on `PATH`:

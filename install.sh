@@ -34,17 +34,16 @@ fi
 os="$(uname -s)"
 arch="$(uname -m)"
 asset=""
-kind="tar"
 extracted_dir=""
 
 case "$os:$arch" in
   Linux:x86_64|Linux:amd64)
-    asset="nvim-linux-x86_64.appimage"
-    kind="appimage"
+    asset="nvim-linux-x86_64.tar.gz"
+    extracted_dir="nvim-linux-x86_64"
     ;;
   Linux:aarch64|Linux:arm64)
-    asset="nvim-linux-arm64.appimage"
-    kind="appimage"
+    asset="nvim-linux-arm64.tar.gz"
+    extracted_dir="nvim-linux-arm64"
     ;;
   Darwin:x86_64)
     asset="nvim-macos-x86_64.tar.gz"
@@ -69,18 +68,13 @@ url="${base_url}/${asset}"
 printf 'Downloading %s\n' "$url"
 curl -fL "$url" -o "$tmp/$asset"
 
-if [ "$kind" = "appimage" ]; then
-  chmod u+x "$tmp/$asset"
-  mv "$tmp/$asset" "$install_bin/$bin_name"
-else
-  if command -v xattr >/dev/null 2>&1; then
-    xattr -c "$tmp/$asset" 2>/dev/null || true
-  fi
-  tar xzf "$tmp/$asset" -C "$tmp"
-  rm -rf "$install_root/$extracted_dir"
-  mv "$tmp/$extracted_dir" "$install_root/$extracted_dir"
-  ln -sfn "$install_root/$extracted_dir/bin/nvim" "$install_bin/$bin_name"
+if command -v xattr >/dev/null 2>&1; then
+  xattr -c "$tmp/$asset" 2>/dev/null || true
 fi
+tar xzf "$tmp/$asset" -C "$tmp"
+rm -rf "$install_root/$extracted_dir"
+mv "$tmp/$extracted_dir" "$install_root/$extracted_dir"
+ln -sfn "$install_root/$extracted_dir/bin/nvim" "$install_bin/$bin_name"
 
 chmod u+x "$install_bin/$bin_name" 2>/dev/null || true
 
