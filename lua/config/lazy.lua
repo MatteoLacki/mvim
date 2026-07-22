@@ -19,6 +19,7 @@ require("lazy").setup({
   require("plugins.treesitter"),
   require("plugins.completion"),
   require("plugins.autopairs"),
+  require("plugins.multicursor"),
   require("plugins.slime"),
   require("plugins.ai"),
 }, {

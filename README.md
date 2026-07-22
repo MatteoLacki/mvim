@@ -23,6 +23,23 @@ Leader key is `Space`.
 | `Tab` | visual/select | Indent the selected lines and keep them selected |
 | `Shift-Tab` | visual/select | Outdent the selected lines and keep them selected |
 
+### Multiple Cursors
+
+Multiple-cursor editing is provided by `vim-visual-multi` with its default mappings.
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `Ctrl-n` | normal | Select the word under the cursor; press again to add its next occurrence |
+| `Ctrl-n` | visual | Select the next occurrence of the current selection |
+| `\\A` | normal/visual | Select all occurrences of the word under the cursor or the visual selection |
+| `n` / `N` | multi-cursor | Add the next/previous occurrence |
+| `q` | multi-cursor | Skip the current occurrence |
+| `Q` | multi-cursor | Remove the current cursor |
+| `Esc` | multi-cursor | Leave multi-cursor mode |
+
+After selecting the occurrences, use normal Vim editing commands such as `c`,
+`d`, or `I`; the edit is applied to every cursor.
+
 ### Python Send To IPython/tmux
 
 | Key | Mode | Action |
