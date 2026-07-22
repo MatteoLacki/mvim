@@ -1,3 +1,5 @@
 require("config.options")
 require("config.keymaps")
+require("config.format").setup()
+require("config.ai_fill").setup()
 require("config.lazy")

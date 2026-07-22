@@ -31,6 +31,47 @@ return {
         return line:match("^%s*.*:%s*$") ~= nil or line:match("^%s*.*:%s*#") ~= nil
       end
 
+      local function is_decorator(line)
+        return line:match("^%s*@") ~= nil
+      end
+
+      local function first_decorator_for(line_nr)
+        while line_nr > 1 and is_decorator(line_at(line_nr - 1)) do
+          line_nr = line_nr - 1
+        end
+        return line_nr
+      end
+
+      local function decorated_target_after(line_nr, last)
+        while line_nr <= last and is_decorator(line_at(line_nr)) do
+          line_nr = line_nr + 1
+        end
+        return line_nr
+      end
+
+      local function find_sendable_block_start(current)
+        local current_indent = indent_width(line_at(current))
+        local first = current
+
+        for line_nr = current - 1, 1, -1 do
+          local line = line_at(line_nr)
+          if not is_blank(line) then
+            local indent = indent_width(line)
+            if indent < current_indent and is_block_header(line) then
+              first = line_nr
+              current_indent = indent
+              if indent == 0 then
+                break
+              end
+            elseif indent < current_indent then
+              current_indent = indent
+            end
+          end
+        end
+
+        return first_decorator_for(first)
+      end
+
       local function find_python_chunk()
         local current = vim.api.nvim_win_get_cursor(0)[1]
         local last = vim.api.nvim_buf_line_count(0)
@@ -40,39 +81,33 @@ return {
           return current, current
         end
 
-        local current_indent = indent_width(current_line)
         local first = current
+        local body_start = current
 
-        if not is_block_header(current_line) then
-          for line_nr = current - 1, 1, -1 do
-            local line = line_at(line_nr)
-            if not is_blank(line) then
-              local indent = indent_width(line)
-              if indent < current_indent and is_block_header(line) then
-                first = line_nr
-                break
-              elseif indent < current_indent then
-                break
-              end
-            end
-          end
+        if is_decorator(current_line) and indent_width(current_line) == 0 then
+          body_start = decorated_target_after(current, last)
+          first = first_decorator_for(current)
+        elseif is_block_header(current_line) and indent_width(current_line) == 0 then
+          first = first_decorator_for(current)
+        else
+          first = find_sendable_block_start(current)
+          body_start = decorated_target_after(first, last)
         end
 
-        while first > 1 do
-          local prev = line_at(first - 1)
-          if prev:match("^%s*@") then
-            first = first - 1
-          else
-            break
-          end
-        end
-
-        local header_line = line_at(first)
+        local header_line = line_at(body_start)
         local base_indent = indent_width(header_line)
-        local stop = first
+        local stop = body_start
         local saw_body = false
 
-        for line_nr = first + 1, last do
+        if body_start > last or is_blank(header_line) then
+          return first, first
+        end
+
+        if not is_block_header(header_line) then
+          return first, body_start
+        end
+
+        for line_nr = body_start + 1, last do
           local line = line_at(line_nr)
           if is_blank(line) then
             if saw_body then

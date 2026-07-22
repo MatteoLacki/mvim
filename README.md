@@ -51,6 +51,15 @@ Leader key is `Space`.
 | `Ctrl-o` | normal | Jump back |
 | `Ctrl-i` | normal | Jump forward |
 
+### Python Formatting
+
+Python files are formatted with Black on write when the project has
+`.venv/bin/black`. Disable this with:
+
+```lua
+vim.g.mvim_black_on_save = false
+```
+
 ### Diagnostics
 
 | Key | Mode | Action |
@@ -73,6 +82,30 @@ Leader key is `Space`.
 
 Bracket and quote pairs are inserted automatically in insert mode by `nvim-autopairs`.
 
+### AI Block Fill
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `Space a f` | normal | Replace the current Python block from a `#claude:` or `#codex:` instruction |
+
+Write an instruction comment inside a Python block, then run `<leader>af`:
+
+```python
+def parse_row(row):
+    #claude: finish this function; return a dict with id, name, and score
+```
+
+or:
+
+```python
+def parse_row(row):
+    #codex: finish this function; return a dict with id, name, and score
+```
+
+`mvim` sends the current block and buffer context to the selected CLI, then
+replaces only that block with the returned code. The edit stays in the buffer, so
+normal undo works.
+
 ## Install from GitHub
 
 ```bash
@@ -93,6 +126,7 @@ Main dependencies:
 - `nvim-autopairs` for bracket/quote completion
 - `vim-slime` plus tmux for send-to-REPL workflow
 - Optional `minuet-ai.nvim` for OpenAI API-backed AI completion
+- Optional `claude` or `codex` CLI for marker-driven block fill
 
 Prerequisites:
 
@@ -194,3 +228,12 @@ installed in the venv. Useful keys:
 
 AI completion uses `minuet-ai.nvim` only when `OPENAI_API_KEY` is present in the
 environment. It is API-billed and separate from Codex subscription credits.
+
+## Optional AI block fill
+
+Install and authenticate either the `claude` or `codex` CLI, then add a marker
+comment such as `#claude: implement this function` or `#codex: implement this
+function` inside a Python block. Press `<leader>af` or run `:AIFill`.
+
+You can force a provider with `:AIFill claude` or `:AIFill codex`. Codex is run
+with read-only sandboxing; Claude is run in print mode with tools disabled.
