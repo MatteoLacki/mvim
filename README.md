@@ -26,6 +26,7 @@ Leader key is `Space`.
 ### Multiple Cursors
 
 Multiple-cursor editing is provided by `vim-visual-multi` with its default mappings.
+Its occurrence matching is case-sensitive by default.
 
 | Key | Mode | Action |
 | --- | --- | --- |
@@ -33,12 +34,17 @@ Multiple-cursor editing is provided by `vim-visual-multi` with its default mappi
 | `Ctrl-n` | visual | Select the next occurrence of the current selection |
 | `\\A` | normal/visual | Select all occurrences of the word under the cursor or the visual selection |
 | `n` / `N` | multi-cursor | Add the next/previous occurrence |
+| `\\c` | multi-cursor | Cycle matching from case-sensitive to case-insensitive to smart-case |
 | `q` | multi-cursor | Skip the current occurrence |
 | `Q` | multi-cursor | Remove the current cursor |
 | `Esc` | multi-cursor | Leave multi-cursor mode |
 
 After selecting the occurrences, use normal Vim editing commands such as `c`,
 `d`, or `I`; the edit is applied to every cursor.
+
+To include matches with different capitalization, start a multi-cursor selection
+and press `\\c` once. Press it again for smart-case matching, or leave and restart
+multi-cursor mode to return to the case-sensitive default.
 
 ### Python Send To IPython/tmux
 
