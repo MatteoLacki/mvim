@@ -20,8 +20,13 @@ Leader key is `Space`.
 | `Ctrl-w h` | normal | Move focus to the left window, usually the project tree |
 | `Ctrl-w l` | normal | Move focus to the right window, usually the file |
 | `Space c` | normal | Open live colorscheme navigator (`↑`/`↓` preview; `Enter` save; `Esc` restore) |
+| `Ctrl-/` | normal | Toggle the language-specific comment on the current line |
+| `Ctrl-/` | visual | Toggle language-specific comments on the selected lines |
 | `Tab` | visual/select | Indent the selected lines and keep them selected |
 | `Shift-Tab` | visual/select | Outdent the selected lines and keep them selected |
+
+Commenting uses each filetype's syntax. In Python, `# ` is inserted after the
+line's indentation, and uncommenting restores the original indentation.
 
 ### Multiple Cursors
 

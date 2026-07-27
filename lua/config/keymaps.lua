@@ -120,6 +120,13 @@ map("n", "<leader>c", choose_colorscheme, { desc = "Choose colorscheme" })
 map("v", "<Tab>", ">gv", { desc = "Indent selection" })
 map("v", "<S-Tab>", "<gv", { desc = "Outdent selection" })
 
+-- Ctrl+/ is encoded as Ctrl+_ by many terminals. Map both spellings to
+-- Neovim's built-in, filetype-aware comment operator.
+for _, key in ipairs({ "<C-/>", "<C-_>" }) do
+  map("n", key, "gcc", { remap = true, desc = "Toggle comment on current line" })
+  map("x", key, "gc", { remap = true, desc = "Toggle comment on selection" })
+end
+
 map("n", "<leader>e", vim.diagnostic.open_float, { desc = "Line diagnostics" })
 map("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
 map("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
