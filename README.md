@@ -24,6 +24,9 @@ Leader key is `Space`.
 | `Ctrl-/` | visual | Toggle language-specific comments on the selected lines |
 | `Tab` | visual/select | Indent the selected lines and keep them selected |
 | `Shift-Tab` | visual/select | Outdent the selected lines and keep them selected |
+| `Ctrl-Shift-Up` / `Ctrl-Shift-Down` | normal | Move the current line up / down |
+| `Ctrl-Shift-Up` / `Ctrl-Shift-Down` | insert | Move the current line up / down and remain in insert mode |
+| `Ctrl-Shift-Up` / `Ctrl-Shift-Down` | visual | Move all selected lines up / down and keep them selected |
 
 Commenting uses each filetype's syntax. In Python, `# ` is inserted after the
 line's indentation, and uncommenting restores the original indentation.

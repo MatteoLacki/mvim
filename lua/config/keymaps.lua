@@ -120,6 +120,13 @@ map("n", "<leader>c", choose_colorscheme, { desc = "Choose colorscheme" })
 map("v", "<Tab>", ">gv", { desc = "Indent selection" })
 map("v", "<S-Tab>", "<gv", { desc = "Outdent selection" })
 
+map("n", "<C-S-Up>", ":move .-2<cr>", { desc = "Move line up" })
+map("n", "<C-S-Down>", ":move .+1<cr>", { desc = "Move line down" })
+map("i", "<C-S-Up>", "<cmd>move .-2<cr>", { desc = "Move line up" })
+map("i", "<C-S-Down>", "<cmd>move .+1<cr>", { desc = "Move line down" })
+map("x", "<C-S-Up>", ":move '<-2<cr>gv", { desc = "Move selection up" })
+map("x", "<C-S-Down>", ":move '>+1<cr>gv", { desc = "Move selection down" })
+
 -- Ctrl+/ is encoded as Ctrl+_ by many terminals. Map both spellings to
 -- Neovim's built-in, filetype-aware comment operator.
 for _, key in ipairs({ "<C-/>", "<C-_>" }) do
