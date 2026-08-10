@@ -27,49 +27,72 @@ return {
         return vim.api.nvim_buf_get_lines(0, line_nr - 1, line_nr, false)[1] or ""
       end
 
-      local function is_block_header(line)
-        return line:match("^%s*.*:%s*$") ~= nil or line:match("^%s*.*:%s*#") ~= nil
-      end
+      local opening_brackets = { ["("] = true, ["["] = true, ["{"] = true }
+      local closing_brackets = { [")"] = true, ["]"] = true, ["}"] = true }
+      local continuation_clauses = { ["else"] = true, elif = true, except = true, finally = true }
 
-      local function is_decorator(line)
-        return line:match("^%s*@") ~= nil
-      end
+      local function bracket_delta(line, string_state)
+        local delta = 0
+        local index = 1
 
-      local function first_decorator_for(line_nr)
-        while line_nr > 1 and is_decorator(line_at(line_nr - 1)) do
-          line_nr = line_nr - 1
-        end
-        return line_nr
-      end
-
-      local function decorated_target_after(line_nr, last)
-        while line_nr <= last and is_decorator(line_at(line_nr)) do
-          line_nr = line_nr + 1
-        end
-        return line_nr
-      end
-
-      local function find_sendable_block_start(current)
-        local current_indent = indent_width(line_at(current))
-        local first = current
-
-        for line_nr = current - 1, 1, -1 do
-          local line = line_at(line_nr)
-          if not is_blank(line) then
-            local indent = indent_width(line)
-            if indent < current_indent and is_block_header(line) then
-              first = line_nr
-              current_indent = indent
-              if indent == 0 then
-                break
+        while index <= #line do
+          local char = line:sub(index, index)
+          if string_state.quote then
+            if string_state.triple then
+              local marker = string_state.quote:rep(3)
+              if line:sub(index, index + 2) == marker then
+                string_state.quote = nil
+                string_state.triple = false
+                index = index + 3
+              elseif char == "\\" then
+                index = index + 2
+              else
+                index = index + 1
               end
-            elseif indent < current_indent then
-              current_indent = indent
+            elseif string_state.escaped then
+              string_state.escaped = false
+              index = index + 1
+            elseif char == "\\" then
+              string_state.escaped = true
+              index = index + 1
+            elseif char == string_state.quote then
+              string_state.quote = nil
+              index = index + 1
+            else
+              index = index + 1
             end
+          elseif char == "#" then
+            break
+          elseif char == "\"" or char == "'" then
+            string_state.quote = char
+            string_state.triple = line:sub(index, index + 2) == char:rep(3)
+            index = index + (string_state.triple and 3 or 1)
+          elseif opening_brackets[char] then
+            delta = delta + 1
+            index = index + 1
+          elseif closing_brackets[char] then
+            delta = delta - 1
+            index = index + 1
+          else
+            index = index + 1
           end
         end
 
-        return first_decorator_for(first)
+        return delta
+      end
+
+      local function logical_line_end(first, last)
+        local depth = 0
+        local string_state = { quote = nil, triple = false, escaped = false }
+
+        for line_nr = first, last do
+          depth = depth + bracket_delta(line_at(line_nr), string_state)
+          if depth <= 0 then
+            return line_nr
+          end
+        end
+
+        return last
       end
 
       local function find_python_chunk()
@@ -81,54 +104,28 @@ return {
           return current, current
         end
 
-        local first = current
-        local body_start = current
+        local base_indent = indent_width(current_line)
+        local stop = logical_line_end(current, last)
+        local line_nr = stop + 1
 
-        if is_decorator(current_line) and indent_width(current_line) == 0 then
-          body_start = decorated_target_after(current, last)
-          first = first_decorator_for(current)
-        elseif is_block_header(current_line) and indent_width(current_line) == 0 then
-          first = first_decorator_for(current)
-        else
-          first = find_sendable_block_start(current)
-          body_start = decorated_target_after(first, last)
-        end
-
-        local header_line = line_at(body_start)
-        local base_indent = indent_width(header_line)
-        local stop = body_start
-        local saw_body = false
-
-        if body_start > last or is_blank(header_line) then
-          return first, first
-        end
-
-        if not is_block_header(header_line) then
-          return first, body_start
-        end
-
-        for line_nr = body_start + 1, last do
+        while line_nr <= last do
           local line = line_at(line_nr)
           if is_blank(line) then
-            if saw_body then
-              stop = line_nr
-            end
+            line_nr = line_nr + 1
           else
             local indent = indent_width(line)
-            if indent > base_indent then
-              saw_body = true
-              stop = line_nr
-            else
+            local first_word = line:match("^%s*([%a_]+)")
+            local continues_clause = indent == base_indent and continuation_clauses[first_word] == true
+            if indent <= base_indent and not continues_clause then
               break
             end
+
+            stop = logical_line_end(line_nr, last)
+            line_nr = stop + 1
           end
         end
 
-        while stop > first and is_blank(line_at(stop)) do
-          stop = stop - 1
-        end
-
-        return first, stop
+        return current, stop
       end
 
       local function first_tmux_window(session)
@@ -235,10 +232,29 @@ return {
         return tmux_send_text(text .. "\n")
       end
 
+      local function move_cursor_after(stop)
+        local line_count = vim.api.nvim_buf_line_count(0)
+        local target = math.min(stop + 1, line_count)
+        local target_line = line_at(target)
+        local column = #(target_line:match("^%s*") or "")
+        vim.api.nvim_win_set_cursor(0, { target, column })
+      end
+
       local function send_line()
         local current = vim.api.nvim_win_get_cursor(0)[1]
         if send_range(current, current) then
-          vim.api.nvim_win_set_cursor(0, { math.min(current + 1, vim.api.nvim_buf_line_count(0)), 0 })
+          move_cursor_after(current)
+        end
+      end
+
+      local function send_python_chunk_or_line()
+        if vim.bo.filetype ~= "python" then
+          return send_line()
+        end
+
+        local first, stop = find_python_chunk()
+        if send_range(first, stop) then
+          move_cursor_after(stop)
         end
       end
 
@@ -320,7 +336,7 @@ return {
       }
 
       for _, key in ipairs(send_keys) do
-        vim.keymap.set("n", key, send_line, { desc = "Send current line to tmux" })
+        vim.keymap.set("n", key, send_python_chunk_or_line, { desc = "Send Python line/block to tmux" })
         vim.keymap.set("x", key, send_visual, { desc = "Send selected text to tmux" })
       end
       vim.keymap.set("n", "<leader><CR>", send_cell, { desc = "Send Python cell to tmux" })

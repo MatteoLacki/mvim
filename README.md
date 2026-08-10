@@ -58,7 +58,7 @@ multi-cursor mode to return to the case-sensitive default.
 
 | Key | Mode | Action |
 | --- | --- | --- |
-| `Ctrl-Space` | normal | Send the current Python line |
+| `Ctrl-Space` | normal | Send current line; send whole block when on a Python block opener |
 | `F5` | normal | Same as `Ctrl-Space`; reliable terminal fallback |
 | `Space s` | normal | Same as `Ctrl-Space`; mnemonic fallback |
 | `Ctrl-Enter` | normal | Same as `Ctrl-Space` when terminal emits a distinct key code |
@@ -67,6 +67,8 @@ multi-cursor mode to return to the case-sensitive default.
 | `Space s` | visual | Send selected text |
 | `Space Enter` | normal | Send current `# %%` cell |
 | `Space r p` | normal | Start IPython in tmux |
+
+Multiline statements expand through matching `()`, `[]`, and `{}` before indentation-based block expansion.
 
 `Ctrl-Enter` support depends on the terminal. If it does nothing, use `Ctrl-Space`, `F5`, or `Space s`.
 
@@ -225,7 +227,7 @@ Or ask `mvim` to start IPython in tmux with:
 
 Send code to the active pane in an attached tmux session, falling back to the last listed tmux pane:
 
-- `<F5>`, `<leader>s`, `<C-Space>`, or `<C-Enter>` when your terminal emits a distinct key code: current Python line, then move past it
+- `<F5>`, `<leader>s`, `<C-Space>`, or `<C-Enter>` when your terminal emits a distinct key code: send current line, or the whole block when on a Python block opener; then move to the next line at its indentation
 - visual `<F5>` or `<C-Space>`: selected text
 - `<leader><Enter>`: current `# %%` cell
 
