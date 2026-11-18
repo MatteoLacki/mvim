@@ -11,6 +11,24 @@ vim.opt.updatetime = 250
 vim.opt.timeoutlen = 400
 vim.opt.autoread = true
 
+-- Fold selected lines with Space f; the gutter also supports mouse toggling.
+vim.opt.foldmethod = "manual"
+vim.opt.foldenable = true
+vim.opt.foldlevelstart = 99
+vim.opt.foldcolumn = "1"
+vim.opt.fillchars:append({ foldopen = "−", foldclose = "+", foldsep = " " })
+
+local indent_folds = vim.api.nvim_create_augroup("MvimIndentFolds", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = indent_folds,
+  pattern = { "python", "rust", "c", "cpp" },
+  callback = function()
+    vim.opt_local.foldmethod = "indent"
+    vim.opt_local.foldignore = ""
+    vim.opt_local.foldlevel = 99
+  end,
+})
+
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4

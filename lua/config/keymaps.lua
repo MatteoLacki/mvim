@@ -116,6 +116,11 @@ map("n", "<leader>w", "<cmd>write<cr>", { desc = "Write file" })
 map("n", "<leader>q", "<cmd>quit<cr>", { desc = "Quit window" })
 map("n", "<leader>h", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
 map("n", "<leader>c", choose_colorscheme, { desc = "Choose colorscheme" })
+map("x", "<leader>f", "<Esc><Cmd>setlocal foldmethod=manual<CR>gvzf", {
+  desc = "Fold selected lines (switch to manual folding)",
+})
+map("n", "<leader>f", "za", { desc = "Toggle fold" })
+map("n", "<leader>F", "zR", { desc = "Open all folds" })
 
 map("v", "<Tab>", ">gv", { desc = "Indent selection" })
 map("v", "<S-Tab>", "<gv", { desc = "Outdent selection" })

@@ -31,6 +31,33 @@ Leader key is `Space`.
 Commenting uses each filetype's syntax. In Python, `# ` is inserted after the
 line's indentation, and uncommenting restores the original indentation.
 
+### Code Folding
+
+Python, Rust, C, and C++ files automatically get folds at each indentation level,
+including loop, conditional, and function bodies, plus classes and Rust `impl`
+and `match` blocks. Folding follows indentation rather than braces, so consistently
+formatted code (for example, with `rustfmt` or `clang-format`) works best.
+Put the cursor inside an indented body
+and press `Space f`, or click its gutter marker. Block headers stay visible;
+files start with all folds open. Indentation levels follow `shiftwidth` (4 by default).
+
+Select lines with `V`, extend the selection with `j`/`k`, then press `Space f`.
+The selection collapses into one tinted line showing a preview and line count.
+This switches the current window to manual folding, preserving existing folds.
+Use `:setlocal foldmethod=indent` to regenerate automatic indentation folds.
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `Space f` | visual | Create and close a fold over the selected lines |
+| `Space f` | normal | Toggle the fold under the cursor |
+| `Space F` | normal | Open all folds in the current window |
+| `zd` | normal | Remove a manual fold under the cursor (keeps the text) |
+
+Click `+` / `−` in the left fold gutter to open / close an existing fold.
+Mouse support requires a terminal that forwards mouse events to Neovim.
+Other filetypes use manual folding by default. Custom folds and open/closed states
+are not saved across editor restarts.
+
 ### Multiple Cursors
 
 Multiple-cursor editing is provided by `vim-visual-multi` with its default mappings.
