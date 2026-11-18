@@ -11,6 +11,8 @@ return {
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
+      local tex_citations = require("config.tex_citations")
+      cmp.register_source("tex_bibitem", tex_citations)
 
       cmp.setup({
         snippet = {
@@ -47,6 +49,19 @@ return {
           { name = "path" },
         }, {
           { name = "buffer" },
+        }),
+      })
+
+      -- Texlab covers .bib files; tex_bibitem covers inline bibliographies.
+      cmp.setup.filetype({ "tex", "plaintex" }, {
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "tex_bibitem" },
+        }, {
+          { name = "luasnip", entry_filter = tex_citations.filter_generic },
+          { name = "path", entry_filter = tex_citations.filter_generic },
+        }, {
+          { name = "buffer", entry_filter = tex_citations.filter_generic },
         }),
       })
     end,

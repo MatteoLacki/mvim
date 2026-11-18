@@ -11,7 +11,9 @@ vim.g.colors_name = "hacker-green"
 local c = {
   bg = "#000000",
   bg_alt = "#071008",
+  bg_line = "#1a2b20",
   bg_sel = "#10331c",
+  visual = "#4a283e",
   fg = "#b7f7c4",
   dim = "#2b6b3f",
   comment = "#4f8f66",
@@ -41,8 +43,8 @@ hi("Cursor", { fg = c.bg, bg = c.cursor })
 hi("lCursor", { link = "Cursor" })
 hi("CursorIM", { link = "Cursor" })
 hi("CursorColumn", { bg = c.bg_alt })
-hi("CursorLine", { bg = c.bg_alt })
-hi("CursorLineNr", { fg = c.neon, bg = c.bg_alt, bold = true })
+hi("CursorLine", { bg = c.bg_line })
+hi("CursorLineNr", { fg = c.neon, bg = c.bg_line, bold = true })
 hi("LineNr", { fg = c.dim, bg = c.bg })
 hi("SignColumn", { fg = c.dim, bg = c.bg })
 hi("FoldColumn", { fg = c.dim, bg = c.bg })
@@ -54,8 +56,8 @@ hi("NonText", { fg = c.dim })
 hi("Whitespace", { fg = c.dim })
 hi("SpecialKey", { fg = c.dim })
 hi("Conceal", { fg = c.dim })
-hi("Visual", { bg = c.bg_sel })
-hi("VisualNOS", { bg = c.bg_sel })
+hi("Visual", { bg = c.visual })
+hi("VisualNOS", { bg = c.visual })
 hi("Search", { fg = c.bg, bg = c.green })
 hi("CurSearch", { fg = c.bg, bg = c.neon, bold = true })
 hi("IncSearch", { link = "CurSearch" })

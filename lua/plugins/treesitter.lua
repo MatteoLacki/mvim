@@ -3,6 +3,6 @@ return {
   branch = "main",
   build = ":TSUpdate",
   config = function()
-    require("nvim-treesitter").install({ "python", "markdown", "markdown_inline" })
+    require("nvim-treesitter").install({ "python", "markdown", "markdown_inline", "latex", "bibtex" })
   end,
 }

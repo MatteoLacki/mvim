@@ -12,11 +12,11 @@ install setup:
 	NVIM_VERSION=$(NVIM_VERSION) BIN_NAME=$(BIN_NAME) INSTALL_BIN=$(INSTALL_BIN) INSTALL_ROOT=$(INSTALL_ROOT) ./install.sh
 
 sync:
-	$(MVIM) --headless "+Lazy! sync" "+MasonInstall pyright" +qa
+	$(MVIM) --headless "+Lazy! sync" "+MasonInstall pyright texlab" +qa
 
 check:
 	bash -n install.sh
-	$(MVIM) --headless +qa
+	$(MVIM) --headless "+luafile tests/tex_citations.lua" +qa
 
 doctor:
 	@printf 'Executable: '; command -v $(BIN_NAME) || true

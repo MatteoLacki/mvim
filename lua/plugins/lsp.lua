@@ -8,7 +8,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     dependencies = { "williamboman/mason.nvim" },
     opts = {
-      ensure_installed = { "pyright" },
+      ensure_installed = { "pyright", "texlab" },
       automatic_enable = false,
     },
   },
@@ -184,6 +184,23 @@ return {
         },
       })
       vim.lsp.enable("pyright")
+
+      vim.lsp.config("texlab", {
+        capabilities = capabilities,
+        root_dir = function(bufnr, on_dir)
+          local fname = vim.api.nvim_buf_get_name(bufnr)
+          local real = vim.uv.fs_realpath(fname) or fname
+          on_dir(vim.fs.root(real, { ".latexmkrc", "latexmkrc", ".tex" }) or vim.fn.getcwd())
+        end,
+        settings = {
+          texlab = {
+            build = {
+              onSave = false,
+            },
+          },
+        },
+      })
+      vim.lsp.enable("texlab")
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(event)

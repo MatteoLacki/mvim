@@ -43,6 +43,7 @@ make doctor
 ## Key Behaviors To Preserve
 
 - Pyright starts for Python files.
+- Texlab starts for `.tex` and `.bib` files with build-on-save disabled.
 - `Ctrl+Space`, `F5`, `<leader>s`, and `Ctrl+Enter` send one Python line unless the cursor is on a block opener, in which case they send the whole block; the cursor then moves to the next line at its indentation.
 - Visual `Ctrl+Space` and visual `F5` send only the selected text.
 - `<leader><Enter>` sends the current `# %%` cell.

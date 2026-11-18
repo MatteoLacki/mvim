@@ -8,6 +8,8 @@ Small Python-focused Neovim config, installed as `mvim`.
 
 Leader key is `Space`.
 
+Reopening a file restores its last cursor position, including after restarting mvim.
+
 ### Files and Basics
 
 | Key | Mode | Action |
@@ -15,6 +17,7 @@ Leader key is `Space`.
 | `Space w` | normal | Write current file |
 | `Space q` | normal | Quit current window |
 | `Space h` | normal | Clear search highlight |
+| `Space l` | normal | Toggle current line highlight in the current window (on by default) |
 | `Space t` | normal | Toggle project tree |
 | `Space T` | normal | Reveal current file in project tree |
 | `Ctrl-w h` | normal | Move focus to the left window, usually the project tree |
@@ -53,8 +56,7 @@ Use `:setlocal foldmethod=indent` to regenerate automatic indentation folds.
 | `Space F` | normal | Open all folds in the current window |
 | `zd` | normal | Remove a manual fold under the cursor (keeps the text) |
 
-Click `+` / `−` in the left fold gutter to open / close an existing fold.
-Mouse support requires a terminal that forwards mouse events to Neovim.
+In Markdown, fenced Python, Rust, C, and C++ code blocks get the same indentation folds.
 Other filetypes use manual folding by default. Custom folds and open/closed states
 are not saved across editor restarts.
 
@@ -137,6 +139,21 @@ vim.g.mvim_black_on_save = false
 | `Shift-Tab` | insert/select | Previous completion item or snippet jump back |
 | `Enter` | insert | Confirm selected completion item |
 | `Ctrl-e` | insert | Abort completion menu |
+
+In TeX files, citation completion supports both inline `\bibitem{key}` entries
+in the current buffer and `.bib` files linked through Texlab. Inside `\cite{...}`
+(also `\citep`, `\citet`, `\parencite`, etc.), the menu shows matching bibliography
+entries and hides generic suggestions. Type a citation key to narrow the list,
+use `Tab` to select, then `Enter` to insert the citation key. Use `Ctrl-Space`
+to reopen the menu.
+
+For a separate `.bib` file, link it in the document so Texlab can find it:
+
+```tex
+\bibliography{references} % references.bib, with BibTeX
+% or, with biblatex:
+\addbibresource{references.bib}
+```
 
 ### Brackets and Quotes
 
@@ -264,7 +281,7 @@ outside tmux.
 
 ## LSP
 
-Pyright is installed by Mason. For Python package completions, start `mvim` from
+Pyright is installed by Mason for Python. Texlab is installed for `.tex` and `.bib` files with build-on-save disabled. For Python package completions, start `mvim` from
 the project root and either activate a virtualenv first or keep it at `.venv/`
 or `venv/` in the project root:
 

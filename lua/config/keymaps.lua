@@ -115,6 +115,9 @@ vim.api.nvim_create_user_command("Colorscheme", choose_colorscheme, {})
 map("n", "<leader>w", "<cmd>write<cr>", { desc = "Write file" })
 map("n", "<leader>q", "<cmd>quit<cr>", { desc = "Quit window" })
 map("n", "<leader>h", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
+map("n", "<leader>l", function()
+  vim.wo.cursorline = not vim.wo.cursorline
+end, { desc = "Toggle current line highlight" })
 map("n", "<leader>c", choose_colorscheme, { desc = "Choose colorscheme" })
 map("x", "<leader>f", "<Esc><Cmd>setlocal foldmethod=manual<CR>gvzf", {
   desc = "Fold selected lines (switch to manual folding)",
