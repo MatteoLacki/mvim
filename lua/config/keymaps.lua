@@ -125,6 +125,33 @@ map("x", "<leader>f", "<Esc><Cmd>setlocal foldmethod=manual<CR>gvzf", {
 map("n", "<leader>f", "za", { desc = "Toggle fold" })
 map("n", "<leader>F", "zR", { desc = "Open all folds" })
 
+-- A bare Space (leader timing out) must not move the cursor right.
+map({ "n", "x" }, "<Space>", "<Nop>", { desc = "Leader key" })
+
+-- Space + Left/Right scrolls the view 24 columns; further Left/Right presses
+-- shortly after keep scrolling, any other key is handed back untouched.
+local scroll_step = 24
+local scroll_repeat_ms = 700
+local left_key, right_key = vim.keycode("<Left>"), vim.keycode("<Right>")
+
+local function scroll_view(first_key)
+  local key = first_key
+  while key == left_key or key == right_key do
+    vim.cmd("normal! " .. scroll_step .. (key == left_key and "zh" or "zl"))
+    vim.cmd.redraw()
+    if not vim.wait(scroll_repeat_ms, function() return vim.fn.getchar(1) ~= 0 end, 10) then
+      return
+    end
+    key = vim.fn.getcharstr()
+  end
+  vim.api.nvim_feedkeys(key, "n", false)
+end
+
+map("n", "<leader><Left>", function() scroll_view(left_key) end, { desc = "Scroll view left (repeatable)" })
+map("n", "<leader><Right>", function() scroll_view(right_key) end, { desc = "Scroll view right (repeatable)" })
+map("n", "<leader><Up>", "<C-y>", { desc = "Scroll view up one line" })
+map("n", "<leader><Down>", "<C-e>", { desc = "Scroll view down one line" })
+
 map("v", "<Tab>", ">gv", { desc = "Indent selection" })
 map("v", "<S-Tab>", "<gv", { desc = "Outdent selection" })
 

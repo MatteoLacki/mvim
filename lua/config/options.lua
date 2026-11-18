@@ -12,6 +12,7 @@ vim.opt.signcolumn = "number"
 vim.opt.updatetime = 250
 vim.opt.timeoutlen = 400
 vim.opt.autoread = true
+vim.opt.wrap = false
 
 -- Fold selected lines with Space f.
 vim.opt.foldmethod = "manual"
@@ -30,6 +31,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 require("config.md_folds").setup()
+require("config.md_background").setup()
 
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
