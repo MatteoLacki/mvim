@@ -1,21 +1,11 @@
--- Tint the background of Markdown prose slightly violet; fenced code stays untinted.
+-- Set Markdown prose colors outside fenced code blocks.
 local M = {}
 
 local ns = vim.api.nvim_create_namespace("mvim_md_background")
-local violet = { 0x8a, 0x5c, 0xf6 }
-local strength = 0.3
 
 local function set_highlight()
-  local bg = vim.api.nvim_get_hl(0, { name = "Normal", link = false }).bg
-  if not bg then
-    return
-  end
-  local channels = { math.floor(bg / 65536) % 256, math.floor(bg / 256) % 256, bg % 256 }
-  local mixed = {}
-  for i = 1, 3 do
-    mixed[i] = math.floor(channels[i] * (1 - strength) + violet[i] * strength + 0.5)
-  end
-  vim.api.nvim_set_hl(0, "MvimMarkdownProse", { bg = string.format("#%02x%02x%02x", mixed[1], mixed[2], mixed[3]) })
+  vim.api.nvim_set_hl(0, "MvimMarkdownProse", { fg = "#cf8589" })
+  vim.api.nvim_set_hl(0, "MvimMarkdownProseBackground", { bg = "#000000" })
 end
 
 local function paint(buf)
@@ -29,7 +19,13 @@ local function paint(buf)
     if line:match("^%s*```") then
       in_code = not in_code
     elseif not in_code then
-      vim.api.nvim_buf_set_extmark(buf, ns, i - 1, 0, { line_hl_group = "MvimMarkdownProse", priority = 1 })
+      vim.api.nvim_buf_set_extmark(buf, ns, i - 1, 0, {
+        end_col = #line,
+        hl_group = "MvimMarkdownProse",
+        line_hl_group = "MvimMarkdownProseBackground",
+        hl_mode = "combine",
+        priority = 1,
+      })
     end
   end
 end
